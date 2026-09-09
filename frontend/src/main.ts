@@ -477,8 +477,8 @@ function updateGreeting() {
   const greetingEl = document.getElementById("dynamic-greeting");
   if (!greetingEl) return;
   const hour = new Date().getHours();
-  if (hour < 12) greetingEl.textContent = "早安";
-  else if (hour < 18) greetingEl.textContent = "午安";
-  else greetingEl.textContent = "晚安";
+  if (hour < 12) greetingEl.textContent = "早安，今天過得好嗎？";
+  else if (hour < 18) greetingEl.textContent = "午安，吃飽了嗎？";
+  else greetingEl.textContent = "晚安，今天辛苦了！";
 }
 updateGreeting();

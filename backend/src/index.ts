@@ -218,7 +218,7 @@ app.post('/api/posts', async (c) => {
   const now = taipeiNow();
 
   const result = await db
-    .prepare('INSERT INTO posts (content, category, ip_hash, created_at) VALUES (?, ?, ?, ?)')
+    .prepare('INSERT INTO posts (content, category, ip_hash, status, created_at) VALUES (?, ?, ?, \'pending\', ?)')
     .bind(content, category, ipHash, now)
     .run();
 
@@ -472,6 +472,20 @@ app.get('/api/admin/posts', authorizeAdmin, async (c) => {
     posts: posts.results,
     pagination: { page, limit, total: total || 0, totalPages: Math.ceil((total || 0) / limit) },
   });
+});
+
+
+// --- PUT /api/admin/posts/:id/approve — 審核並回覆貼文 ---
+app.put('/api/admin/posts/:id/approve', authorizeAdmin, async (c) => {
+  const db = c.env.DB;
+  const id = parseInt(c.req.param('id'));
+  const body = await c.req.json<{ reply: string }>();
+
+  await db.prepare('UPDATE posts SET status = ?, admin_reply = ? WHERE id = ?')
+    .bind('approved', body.reply || null, id)
+    .run();
+    
+  return c.json({ success: true, message: '貼文已審核發布' });
 });
 
 // --- PUT /api/admin/posts/:id/hide — 隱藏貼文 ---

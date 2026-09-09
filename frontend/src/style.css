@@ -674,3 +674,73 @@ select:focus {
     height: 44px;
   }
 }
+
+/* Updates for 3-column grid and new button */
+.greeting-header h1 {
+  font-size: 1.2rem;
+  color: var(--primary-color);
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.05em;
+}
+.greeting-header h2 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--text-color);
+  margin-bottom: 0.5rem;
+}
+
+/* Adjust send button */
+.send-btn {
+  width: auto;
+  border-radius: 9999px;
+  padding: 0 1rem;
+  gap: 0.4rem;
+}
+.send-text {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+/* 3-column grid for posts like IG */
+.posts-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .posts-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .posts-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Post Card adjustments for grid */
+.post-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.post-content {
+  flex: 1;
+}
+.admin-reply-box {
+  background: rgba(79, 70, 229, 0.05);
+  border-left: 3px solid var(--primary-color);
+  padding: 0.75rem 1rem;
+  margin-top: 1rem;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.95rem;
+}
+.admin-reply-box strong {
+  color: var(--primary-color);
+  display: block;
+  margin-bottom: 0.25rem;
+}

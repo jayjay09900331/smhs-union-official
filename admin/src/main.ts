@@ -63,9 +63,10 @@ function formatDate(iso: string) {
 function getStatusBadge(status: string) {
   switch (status) {
     case 'active': return '<span class="badge badge-success">活躍</span>';
+    case 'approved': return '<span class="badge badge-success">已發布</span>';
     case 'hidden': return '<span class="badge badge-warning">已隱藏</span>';
     case 'deleted': return '<span class="badge badge-danger">已刪除</span>';
-    case 'pending': return '<span class="badge badge-warning">待處理</span>';
+    case 'pending': return '<span class="badge badge-warning">待處理/審核</span>';
     case 'resolved': return '<span class="badge badge-success">已處理</span>';
     case 'dismissed': return '<span class="badge badge-default">已駁回</span>';
     default: return `<span class="badge badge-default">${status}</span>`;
@@ -219,7 +220,9 @@ async function renderPosts(container: HTMLElement) {
       <div class="card-header">
         <div class="tabs" style="margin-bottom:0; border-bottom:none">
           <div class="tab ${postsStatus==='all'?'active':''}" onclick="setPostsStatus('all')">全部</div>
-          <div class="tab ${postsStatus==='active'?'active':''}" onclick="setPostsStatus('active')">活躍</div>
+          <div class="tab ${postsStatus==='pending'?'active':''}" onclick="setPostsStatus('pending')">待審核</div>
+          <div class="tab ${postsStatus==='approved'?'active':''}" onclick="setPostsStatus('approved')">已發布</div>
+          
           <div class="tab ${postsStatus==='hidden'?'active':''}" onclick="setPostsStatus('hidden')">已隱藏</div>
           <div class="tab ${postsStatus==='deleted'?'active':''}" onclick="setPostsStatus('deleted')">已刪除</div>
         </div>
@@ -231,6 +234,25 @@ async function renderPosts(container: HTMLElement) {
       </div>
     </div>
   `;
+  
+(window as any).approvePost = async (id: number) => {
+  const reply = prompt('請輸入要回覆給這篇貼文的內容 (留白代表純通過)：');
+  if (reply === null) return;
+  try {
+    const res = await apiFetch(`/api/admin/posts/${id}/approve`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ reply })
+    });
+    if (res.success) {
+      showToast('已審核並發布貼文');
+      fetchPosts();
+    }
+  } catch (err) {
+    showToast('連線錯誤', 'error');
+  }
+};
+
   (window as any).setPostsStatus = (status: string) => { postsStatus = status; postsPage = 1; fetchPosts(); };
   await fetchPosts();
 }
@@ -277,7 +299,8 @@ async function fetchPosts() {
           <td>${formatDate(p.created_at)}</td>
           <td>
             <div class="actions">
-              ${p.status === 'active' ? `<button class="btn btn-sm btn-warning" onclick="updatePostStatus(${p.id}, 'hide')">隱藏</button>` : ''}
+              ${p.status === 'pending' ? `<button class="btn btn-sm btn-success" onclick="approvePost(${p.id})">審核並回覆</button>` : ''}
+              ${p.status === 'approved' || p.status === 'active' ? `<button class="btn btn-sm btn-warning" onclick="updatePostStatus(${p.id}, 'hide')">隱藏</button>` : ''}
               ${p.status === 'hidden' ? `<button class="btn btn-sm btn-success" onclick="updatePostStatus(${p.id}, 'restore')">恢復</button>` : ''}
               ${p.status !== 'deleted' ? `<button class="btn btn-sm btn-danger" onclick="deletePost(${p.id})">刪除</button>` : ''}
             </div>
