@@ -309,7 +309,7 @@ async function fetchPosts() {
           <td>${escapeHtml(p.category || '-')}</td>
           <td>${(p.ip_hash || '').substring(0,8)}...</td>
           <td>${getStatusBadge(p.status)}</td>
-          <td>👍 ${p.likes} / 💬 ${p.comments_count || 0}</td>
+          <td>👍 ${p.likes} / 💬 ${p.comment_count || 0}</td>
           <td>${formatDate(p.created_at)}</td>
           <td>
             <div class="actions">
