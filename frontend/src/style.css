@@ -769,3 +769,11 @@ select:focus {
   appearance: none !important;
   z-index: 10;
 }
+
+.threads-btn {
+  background-color: #000000;
+  color: white;
+}
+.threads-btn:hover {
+  background-color: #333333;
+}
