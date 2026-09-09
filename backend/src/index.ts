@@ -156,8 +156,8 @@ app.get('/api/posts', async (c) => {
   const category = c.req.query('category');
   const offset = (page - 1) * limit;
 
-  let query = 'SELECT id, content, category, likes, comment_count, created_at FROM posts WHERE status = ?';
-  const params: any[] = ['active'];
+  let query = 'SELECT id, content, category, likes, comment_count, created_at, admin_reply FROM posts WHERE status = ?';
+  const params: any[] = ['approved'];
 
   if (category && category !== '全部') {
     query += ' AND category = ?';
@@ -171,7 +171,7 @@ app.get('/api/posts', async (c) => {
 
   // Get total count
   let countQuery = 'SELECT COUNT(*) as total FROM posts WHERE status = ?';
-  const countParams: any[] = ['active'];
+  const countParams: any[] = ['approved'];
   if (category && category !== '全部') {
     countQuery += ' AND category = ?';
     countParams.push(category);

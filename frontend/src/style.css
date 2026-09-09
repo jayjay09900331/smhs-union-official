@@ -744,3 +744,22 @@ select:focus {
   display: block;
   margin-bottom: 0.25rem;
 }
+
+/* Force Safari input resets */
+.pill-form input {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  border: none !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  min-width: 0; /* Fix flexbox blowout */
+}
+
+.pill-form .send-btn {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  z-index: 10;
+}
