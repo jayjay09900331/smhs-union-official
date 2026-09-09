@@ -27,7 +27,7 @@ let reportTarget: { type: 'post' | 'comment'; postId: string; commentId?: string
 
 // DOM Elements
 const postForm = document.getElementById('post-form') as HTMLFormElement;
-const postContent = document.getElementById('post-content') as HTMLInputElement;
+const postContent = document.getElementById('main-post-input') as HTMLInputElement;
 const charCounter = document.getElementById('char-counter') as HTMLSpanElement;
 const submitPostBtn = document.getElementById('submit-post-btn') as HTMLButtonElement;
 
@@ -70,7 +70,7 @@ function setupEventListeners() {
       await createPost(postContent.value.trim());
       postContent.value = '';
       postContent.dispatchEvent(new Event('input'));
-      showToast('發布成功！', 'success');
+      showToast('發布成功！等待管理員回覆後將會顯示於板上。', 'success');
       
       // Reload posts
       currentPage = 1;
