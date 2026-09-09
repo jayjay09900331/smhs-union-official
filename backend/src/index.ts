@@ -243,8 +243,8 @@ app.get('/api/posts/:id', async (c) => {
   const id = parseInt(c.req.param('id'));
 
   const post = await db
-    .prepare('SELECT id, content, category, likes, comment_count, created_at FROM posts WHERE id = ? AND status = ?')
-    .bind(id, 'active')
+    .prepare('SELECT id, content, category, likes, comment_count, created_at, admin_reply FROM posts WHERE id = ? AND status = ?')
+    .bind(id, 'approved')
     .first();
 
   if (!post) return c.json({ error: '貼文不存在' }, 404);
@@ -267,7 +267,7 @@ app.post('/api/posts/:id/like', async (c) => {
   // Check post exists
   const post = await db
     .prepare('SELECT id, likes FROM posts WHERE id = ? AND status = ?')
-    .bind(postId, 'active')
+    .bind(postId, 'approved')
     .first<{ id: number; likes: number }>();
 
   if (!post) return c.json({ error: '貼文不存在' }, 404);
@@ -326,7 +326,7 @@ app.post('/api/posts/:id/comments', async (c) => {
   // Check post exists
   const post = await db
     .prepare('SELECT id FROM posts WHERE id = ? AND status = ?')
-    .bind(postId, 'active')
+    .bind(postId, 'approved')
     .first();
 
   if (!post) return c.json({ error: '貼文不存在' }, 404);
@@ -426,7 +426,7 @@ app.post('/api/admin/login', async (c) => {
 app.get('/api/admin/stats', authorizeAdmin, async (c) => {
   const db = c.env.DB;
 
-  const totalPosts = await db.prepare('SELECT COUNT(*) as c FROM posts WHERE status = ?').bind('active').first<number>('c');
+  const totalPosts = await db.prepare('SELECT COUNT(*) as c FROM posts WHERE status = ?').bind('approved').first<number>('c');
   const hiddenPosts = await db.prepare('SELECT COUNT(*) as c FROM posts WHERE status = ?').bind('hidden').first<number>('c');
   const pendingReports = await db.prepare('SELECT COUNT(*) as c FROM reports WHERE status = ?').bind('pending').first<number>('c');
   const totalComments = await db.prepare('SELECT COUNT(*) as c FROM comments WHERE status = ?').bind('active').first<number>('c');
@@ -502,7 +502,7 @@ app.put('/api/admin/posts/:id/restore', authorizeAdmin, async (c) => {
   const db = c.env.DB;
   const id = parseInt(c.req.param('id'));
 
-  await db.prepare('UPDATE posts SET status = ? WHERE id = ?').bind('active', id).run();
+  await db.prepare('UPDATE posts SET status = ? WHERE id = ?').bind('approved', id).run();
   return c.json({ success: true, message: '貼文已恢復' });
 });
 

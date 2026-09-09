@@ -265,6 +265,7 @@ function renderNewPosts(newPosts: Post[]) {
         </button>
       </div>
       <div class="post-content">${escapeHtml(post.content).replace(/\n/g, '<br>')}</div>
+      ${post.adminReply ? `<div class="admin-reply-box"><strong>✅ 學生會回覆：</strong>${escapeHtml(post.adminReply).replace(/\n/g, '<br>')}</div>` : ''}
       <div class="post-footer">
         <button class="action-btn like-btn ${post.liked ? 'liked' : ''}">
           <svg class="heart-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="${post.liked ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
