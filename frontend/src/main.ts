@@ -141,7 +141,15 @@ async function fetchPosts(page: number, category?: string): Promise<{ data: Post
   if (!res.ok) throw new Error('Failed to fetch posts');
   const json = await res.json();
   return {
-    data: json.posts || [],
+    data: (json.posts || []).map((p: any) => ({
+      id: p.id,
+      content: p.content,
+      category: p.category,
+      createdAt: p.created_at,
+      likeCount: p.likes,
+      commentCount: p.comment_count,
+      adminReply: p.admin_reply
+    })),
     hasMore: json.pagination ? (json.pagination.page < json.pagination.totalPages) : false
   };
 }
@@ -158,16 +166,31 @@ async function createPost(content: string): Promise<Post> {
 
 async function fetchPostDetail(id: string): Promise<{ post: Post, comments: Comment[] }> {
   const res = await fetch(`${BASE_URL}/api/posts/${id}`);
-  if (!res.ok) throw new Error('Failed to fetch post detail');
-  return res.json();
+  if (!res.ok) throw new Error('Failed to fetch post details');
+  const data = await res.json();
+  return {
+    post: {
+      id: data.post.id,
+      content: data.post.content,
+      category: data.post.category,
+      createdAt: data.post.created_at,
+      likeCount: data.post.likes,
+      commentCount: data.post.comment_count,
+      adminReply: data.post.admin_reply
+    },
+    comments: (data.comments || []).map((c: any) => ({
+      id: c.id,
+      content: c.content,
+      createdAt: c.created_at
+    }))
+  };
 }
 
 async function likePostApi(id: string): Promise<{ likeCount: number }> {
-  const res = await fetch(`${BASE_URL}/api/posts/${id}/like`, {
-    method: 'POST'
-  });
+  const res = await fetch(`${BASE_URL}/api/posts/${id}/like`, { method: 'POST' });
   if (!res.ok) throw new Error('Failed to like post');
-  return res.json();
+  const data = await res.json();
+  return { likeCount: data.likes };
 }
 
 async function addComment(postId: string, content: string): Promise<Comment> {
@@ -177,7 +200,12 @@ async function addComment(postId: string, content: string): Promise<Comment> {
     body: JSON.stringify({ content })
   });
   if (!res.ok) throw new Error('Failed to add comment');
-  return res.json();
+  const data = await res.json();
+  return {
+    id: data.comment.id,
+    content: data.comment.content,
+    createdAt: data.comment.created_at
+  };
 }
 
 async function reportPost(postId: string, reason: string, commentId?: string): Promise<void> {
