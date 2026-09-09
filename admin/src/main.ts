@@ -121,7 +121,7 @@ function showCustomModal(title: string, bodyHtml: string) {
 
 // View state
 let currentView = 'dashboard';
-const views = ['dashboard', 'posts', 'reports', 'settings'];
+const views = ['dashboard', 'posts', 'reports', 'applications', 'settings'];
 
 function switchView(view: string) {
   if (!views.includes(view)) view = 'dashboard';
@@ -139,6 +139,7 @@ function switchView(view: string) {
     dashboard: '儀表板',
     posts: '貼文管理',
     reports: '檢舉處理',
+    applications: '管理員審核',
     settings: '設定'
   };
   document.getElementById('page-title')!.innerText = titles[view] || '管理後台';
@@ -521,6 +522,56 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('hashchange', () => {
     if (getToken()) {
       switchView(location.hash.replace('#', '') || 'dashboard');
+    }
+  });
+
+
+  // Auth Switch & Register
+  const loginForm = document.getElementById('login-form');
+  const registerForm = document.getElementById('register-form');
+  
+  document.getElementById('show-register')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    loginForm?.classList.add('hidden');
+    registerForm?.classList.remove('hidden');
+    document.getElementById('auth-title')!.textContent = '申請成為管理員';
+  });
+
+  document.getElementById('show-login')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    registerForm?.classList.add('hidden');
+    loginForm?.classList.remove('hidden');
+    document.getElementById('auth-title')!.textContent = '管理員登入';
+  });
+
+  registerForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = (document.getElementById('reg-name') as HTMLInputElement).value;
+    const username = (document.getElementById('reg-username') as HTMLInputElement).value;
+    const password = (document.getElementById('reg-password') as HTMLInputElement).value;
+    const submitBtn = document.getElementById('register-submit') as HTMLButtonElement;
+    
+    submitBtn.disabled = true;
+    submitBtn.textContent = '送出中...';
+    
+    try {
+      const res = await fetch(`${BASE_URL}/api/admin/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, username, password })
+      });
+      const data = await res.json();
+      
+      if (!res.ok) throw new Error(data.error || '申請失敗');
+      
+      showToast('申請已送出，請等候管理員核准！');
+      (registerForm as HTMLFormElement).reset();
+      document.getElementById('show-login')?.click();
+    } catch (err: any) {
+      showToast(err.message, 'error');
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = '送出申請';
     }
   });
 

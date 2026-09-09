@@ -382,10 +382,14 @@ app.post('/api/admin/login', async (c) => {
   const admin = await db
     .prepare('SELECT * FROM admins WHERE username = ?')
     .bind(body.username)
-    .first<{ username: string; password: string; name: string }>();
+    .first<{ username: string; password: string; name: string; status: string }>();
 
   if (!admin || admin.password !== body.password) {
     return c.json({ error: '帳號或密碼錯誤' }, 401);
+  }
+  
+  if (admin.status === 'pending') {
+    return c.json({ error: '您的帳號尚在審核中，請等候管理員核准' }, 403);
   }
 
   const token = await sign(
