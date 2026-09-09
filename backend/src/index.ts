@@ -432,7 +432,7 @@ app.get('/api/admin/stats', authorizeAdmin, async (c) => {
   const totalComments = await db.prepare('SELECT COUNT(*) as c FROM comments WHERE status = ?').bind('active').first<number>('c');
 
   return c.json({
-    totalPosts: totalPosts || 0,
+    activePosts: totalPosts || 0,
     hiddenPosts: hiddenPosts || 0,
     pendingReports: pendingReports || 0,
     totalComments: totalComments || 0,
