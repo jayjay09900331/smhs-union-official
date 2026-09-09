@@ -41,7 +41,7 @@ const taipeiNow = (): string => {
 // Profanity Filter (髒話過濾器)
 // ==========================================
 
-const PROFANITY_LIST: string[] = ['機掰', '傻逼', '智障', '尼哥', '婊子', '狗娘養', '草泥馬', '草你媽', 'fuck', 'shit', 'damn', 'bitch', 'asshole', 'dick', 'pussy', 'wtf', 'stfu', '死全家', '低能', '腦殘', '弱智', '外勞', '番仔', '死玻璃', '台女', '母豬', '傻屌', '憨Ｂ', '憨B', '憨兒', '破麻', '綠茶婊', '廢物', '垃圾', '畜生', '敗類', '賤人', '死媽', '死屁孩', '智缺', 'slut', 'whore', 'cunt', 'faggot', 'nigger', 'nigga', 'retard', 'kys', 'motherfucker', 'mf', 'douchebag'];
+const PROFANITY_LIST: string[] = ['機掰', '傻逼', '智障', '尼哥', '婊子', '狗娘養', '草泥馬', '草你媽', 'fuck', 'shit', 'damn', 'bitch', 'asshole', 'dick', 'pussy', 'wtf', 'stfu', '死全家', '低能', '腦殘', '弱智', '外勞', '番仔', '死玻璃', '台女', '母豬', '傻屌', '憨Ｂ', '憨B', '憨兒', '破麻', '綠茶婊', '廢物', '垃圾', '畜生', '敗類', '賤人', '死媽', '死屁孩', '智缺', 'slut', 'whore', 'cunt', 'faggot', 'nigger', 'nigga', 'retard', 'kys', 'motherfucker', 'mf', 'douchebag', '幹', '幹你娘', '幹您娘', '靠北', '靠杯', '靠夭', '靠腰', '媽的', '他媽的', '操', '操你媽', '操您媽'];
 
 /** Normalize text for profanity matching: remove spaces, convert to lowercase */
 const normalizeText = (text: string): string => {
