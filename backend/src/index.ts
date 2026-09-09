@@ -440,6 +440,16 @@ app.get('/api/admin/stats', authorizeAdmin, async (c) => {
 });
 
 // --- GET /api/admin/posts — 管理員查看所有貼文（含 ip_hash） ---
+// --- GET /api/admin/posts/:id ---
+app.get('/api/admin/posts/:id', authorizeAdmin, async (c) => {
+  const db = c.env.DB;
+  const id = parseInt(c.req.param('id'));
+  const post = await db.prepare('SELECT * FROM posts WHERE id = ?').bind(id).first();
+  if (!post) return c.json({ error: '貼文不存在' }, 404);
+  const comments = await db.prepare('SELECT * FROM comments WHERE post_id = ? ORDER BY floor ASC').bind(id).all();
+  return c.json({ ...post, comments: comments.results });
+});
+
 app.get('/api/admin/posts', authorizeAdmin, async (c) => {
   const db = c.env.DB;
   const page = parseInt(c.req.query('page') || '1');
@@ -521,6 +531,35 @@ app.delete('/api/admin/posts/:id', authorizeAdmin, async (c) => {
 });
 
 // --- DELETE /api/admin/comments/:id — 刪除留言 ---
+// --- PUT /api/admin/comments/:id/hide — 隱藏留言 ---
+app.put('/api/admin/comments/:id/hide', authorizeAdmin, async (c) => {
+  const db = c.env.DB;
+  const id = parseInt(c.req.param('id'));
+  const comment = await db.prepare('SELECT post_id FROM comments WHERE id = ?').bind(id).first<{ post_id: number }>();
+  if (!comment) return c.json({ error: '留言不存在' }, 404);
+
+  await db.batch([
+    db.prepare('UPDATE comments SET status = ? WHERE id = ?').bind('hidden', id),
+    db.prepare('UPDATE posts SET comment_count = MAX(comment_count - 1, 0) WHERE id = ?').bind(comment.post_id),
+  ]);
+  return c.json({ success: true, message: '留言已隱藏' });
+});
+
+// --- PUT /api/admin/comments/:id/restore — 恢復留言 ---
+app.put('/api/admin/comments/:id/restore', authorizeAdmin, async (c) => {
+  const db = c.env.DB;
+  const id = parseInt(c.req.param('id'));
+  const comment = await db.prepare('SELECT post_id FROM comments WHERE id = ?').bind(id).first<{ post_id: number }>();
+  if (!comment) return c.json({ error: '留言不存在' }, 404);
+
+  await db.batch([
+    db.prepare('UPDATE comments SET status = ? WHERE id = ?').bind('active', id),
+    db.prepare('UPDATE posts SET comment_count = comment_count + 1 WHERE id = ?').bind(comment.post_id),
+  ]);
+  return c.json({ success: true, message: '留言已恢復' });
+});
+
+// --- DELETE /api/admin/comments/:id — 刪除留言 ---
 app.delete('/api/admin/comments/:id', authorizeAdmin, async (c) => {
   const db = c.env.DB;
   const id = parseInt(c.req.param('id'));
@@ -533,7 +572,7 @@ app.delete('/api/admin/comments/:id', authorizeAdmin, async (c) => {
   if (!comment) return c.json({ error: '留言不存在' }, 404);
 
   await db.batch([
-    db.prepare('UPDATE comments SET status = ? WHERE id = ?').bind('deleted', id),
+    db.prepare('DELETE FROM comments WHERE id = ?').bind(id),
     db.prepare('UPDATE posts SET comment_count = MAX(comment_count - 1, 0) WHERE id = ?').bind(comment.post_id),
   ]);
 
