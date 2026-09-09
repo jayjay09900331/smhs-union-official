@@ -207,7 +207,7 @@ app.post('/api/posts', async (c) => {
   // Profanity check
   const profanity = checkProfanity(content);
   if (profanity) {
-    return c.json({ error: '內容包含不當用語，請修改後重新發布' }, 400);
+    return c.json({ error: '⚠️ 請注意您的用詞！內容包含不當用語，無法送出！' }, 400);
   }
 
   // Rate limit: max 3 posts per minute
@@ -315,7 +315,7 @@ app.post('/api/posts/:id/comments', async (c) => {
   // Profanity check
   const profanity = checkProfanity(content);
   if (profanity) {
-    return c.json({ error: '留言包含不當用語，請修改後重新發布' }, 400);
+    return c.json({ error: '⚠️ 請注意您的用詞！留言包含不當用語，無法送出！' }, 400);
   }
 
   // Rate limit: max 10 comments per minute
