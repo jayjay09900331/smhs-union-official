@@ -514,7 +514,7 @@ app.delete('/api/admin/posts/:id', authorizeAdmin, async (c) => {
   await db.batch([
     db.prepare('DELETE FROM comments WHERE post_id = ?').bind(id),
     db.prepare('DELETE FROM likes WHERE post_id = ?').bind(id),
-    db.prepare('UPDATE posts SET status = ? WHERE id = ?').bind('deleted', id),
+    db.prepare('DELETE FROM posts WHERE id = ?').bind(id),
   ]);
 
   return c.json({ success: true, message: '貼文已刪除' });

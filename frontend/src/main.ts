@@ -130,14 +130,20 @@ function setupEventListeners() {
 }
 
 // API Functions
-async function fetchPosts(page: number): Promise<{ data: Post[], hasMore: boolean }> {
+async function fetchPosts(page: number, category?: string): Promise<{ data: Post[], hasMore: boolean }> {
   const url = new URL(`${BASE_URL}/api/posts`);
   url.searchParams.append('page', page.toString());
-  
+  if (category && category !== '全部') {
+    url.searchParams.append('category', category);
+  }
   
   const res = await fetch(url.toString());
   if (!res.ok) throw new Error('Failed to fetch posts');
-  return res.json();
+  const json = await res.json();
+  return {
+    data: json.posts || [],
+    hasMore: json.pagination ? (json.pagination.page < json.pagination.totalPages) : false
+  };
 }
 
 async function createPost(content: string): Promise<Post> {
