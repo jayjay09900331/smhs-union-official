@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>海星學生會官方匿名板 - 管理後台</title>
+  <link rel="stylesheet" href="/src/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <!-- Login Screen -->
+  <div id="login-screen" class="screen">
+    <div class="login-card">
+      <div class="login-header">
+        <h2>管理員登入</h2>
+        <p>海星學生會官方匿名板</p>
+      </div>
+      <form id="login-form">
+        <div class="form-group">
+          <label for="username">使用者名稱</label>
+          <input type="text" id="username" required placeholder="請輸入帳號">
+        </div>
+        <div class="form-group">
+          <label for="password">密碼</label>
+          <input type="password" id="password" required placeholder="請輸入密碼">
+        </div>
+        <button type="submit" class="btn btn-primary btn-block" id="login-btn">登入</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Main App -->
+  <div id="app-screen" class="screen hidden">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h3>管理後台</h3>
+        <p>SMHS Union</p>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="#dashboard" class="nav-item" data-target="dashboard">
+          <i class="fas fa-chart-line"></i> 儀表板
+        </a>
+        <a href="#posts" class="nav-item" data-target="posts">
+          <i class="fas fa-file-alt"></i> 貼文管理
+        </a>
+        <a href="#reports" class="nav-item" data-target="reports">
+          <i class="fas fa-flag"></i> 檢舉處理
+        </a>
+        <a href="#settings" class="nav-item" data-target="settings">
+          <i class="fas fa-cog"></i> 設定
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <button id="logout-btn" class="btn btn-outline-light btn-block">登出</button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="topbar">
+        <button id="mobile-menu-btn" class="mobile-only"><i class="fas fa-bars"></i></button>
+        <h2 id="page-title">儀表板</h2>
+      </header>
+      
+      <div class="content-area">
+        <!-- Views -->
+        <div id="view-dashboard" class="view hidden">
+          <!-- Populated by JS -->
+        </div>
+        <div id="view-posts" class="view hidden">
+          <!-- Populated by JS -->
+        </div>
+        <div id="view-reports" class="view hidden">
+          <!-- Populated by JS -->
+        </div>
+        <div id="view-settings" class="view hidden">
+          <div class="card">
+            <div class="card-header">
+              <h3>修改密碼</h3>
+            </div>
+            <div class="card-body">
+              <form id="password-form">
+                <div class="form-group">
+                  <label for="old-password">舊密碼</label>
+                  <input type="password" id="old-password" required>
+                </div>
+                <div class="form-group">
+                  <label for="new-password">新密碼</label>
+                  <input type="password" id="new-password" required>
+                </div>
+                <div class="form-group">
+                  <label for="confirm-password">確認新密碼</label>
+                  <input type="password" id="confirm-password" required>
+                </div>
+                <button type="submit" class="btn btn-primary" id="change-pwd-btn">更新密碼</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container"></div>
+
+  <!-- Modal Container -->
+  <div id="modal-container" class="modal-container hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content" id="modal-content">
+      <!-- Modal body -->
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

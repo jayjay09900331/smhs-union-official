@@ -1,0 +1,19 @@
+{
+  "name": "smhs-union-official-api",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "db:init": "wrangler d1 execute smhs-union-db --local --file=./schema.sql",
+    "db:init:remote": "wrangler d1 execute smhs-union-db --remote --file=./schema.sql",
+    "cf-typegen": "wrangler types"
+  },
+  "dependencies": {
+    "hono": "^4.7.4"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20260908.1",
+    "wrangler": "^4.87.0"
+  }
+}

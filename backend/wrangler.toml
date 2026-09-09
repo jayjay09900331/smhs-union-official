@@ -1,0 +1,21 @@
+name = "smhs-union-official-api"
+main = "src/index.ts"
+compatibility_date = "2024-04-03"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "smhs-union-db"
+database_id = "8f383bba-87b9-45d1-859a-b19fe8c55242"
+
+
+[secrets]
+required = ["JWT_SECRET"]  # Admin login only — set via: wrangler secret put JWT_SECRET
+
+[observability]
+enabled = false
+
+[observability.logs]
+enabled = true
+head_sampling_rate = 1
+persist = true
+invocation_logs = true

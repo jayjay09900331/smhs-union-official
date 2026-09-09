@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>海星學生會匿名板</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <header class="greeting-header">
+      <h1 id="dynamic-greeting">早安</h1>
+      <p class="subtitle">今天想分享什麼？匿名發布，安心傾訴</p>
+    </header>
+
+    <main class="container">
+      <section class="post-form-container">
+        <form id="post-form" class="pill-form">
+          <input 
+            type="text" 
+            id="post-content" 
+            placeholder="說點什麼吧..." 
+            maxlength="500" 
+            required 
+            autocomplete="off"
+          />
+          <button type="submit" id="submit-post-btn" class="send-btn" title="發布">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+          </button>
+        </form>
+      </section>
+
+      <section id="posts-container" class="posts-container">
+        <!-- Posts will be rendered here -->
+      </section>
+      
+      <div id="loading-spinner" class="loading-spinner hidden">
+        <div class="spinner"></div>
+      </div>
+    </main>
+
+    <!-- Report Modal -->
+    <div id="report-modal" class="modal hidden">
+      <div class="modal-content">
+        <h3>檢舉內容</h3>
+        <p class="modal-desc">請描述檢舉原因，我們會盡快處理。</p>
+        <textarea id="report-reason" placeholder="請輸入檢舉原因..." rows="4"></textarea>
+        <div class="modal-actions">
+          <button id="cancel-report-btn" class="btn-secondary">取消</button>
+          <button id="submit-report-btn" class="btn-danger">提交檢舉</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notifications Area -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
