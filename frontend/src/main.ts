@@ -63,7 +63,7 @@ function setupEventListeners() {
     e.preventDefault();
     if (postContent.value.trim().length === 0) return;
     const contentText = postContent.value.trim();
-    const profanityWords = ['幹', '靠北', '三字經', '機掰', '傻逼', '智障', '尼哥', '婊子', '狗娘養', '草泥馬', '草你媽', 'fuck', 'shit', 'damn', 'bitch', 'asshole', 'dick', 'pussy', 'wtf', 'stfu', '死全家', '低能', '腦殘', '弱智', '外勞', '番仔', 'gay', '死玻璃', '台女', '母豬'];
+    const profanityWords = ['機掰', '傻逼', '智障', '尼哥', '婊子', '狗娘養', '草泥馬', '草你媽', 'fuck', 'shit', 'damn', 'bitch', 'asshole', 'dick', 'pussy', 'wtf', 'stfu', '死全家', '低能', '腦殘', '弱智', '外勞', '番仔', '死玻璃', '台女', '母豬','傻屌','憨Ｂ','憨B','憨兒'];
     
     // Normalize and check
     const normalizeText = (text) => text.toLowerCase().replace(/\s+/g, '').replace(/[～~!@#$%^&*()\-_=+\.。,，]+/g, '');
@@ -440,7 +440,7 @@ async function handleAddComment(postId: string, cardElement: HTMLElement) {
   const sendBtn = cardElement.querySelector('.send-comment-btn') as HTMLButtonElement;
   
   if (!content) return;
-  const profanityWords = ['幹', '靠北', '三字經', '機掰', '傻逼', '智障', '尼哥', '婊子', '狗娘養', '草泥馬', '草你媽', 'fuck', 'shit', 'damn', 'bitch', 'asshole', 'dick', 'pussy', 'wtf', 'stfu', '死全家', '低能', '腦殘', '弱智', '外勞', '番仔', 'gay', '死玻璃', '台女', '母豬'];
+  const profanityWords = ['機掰', '傻逼', '智障', '尼哥', '婊子', '狗娘養', '草泥馬', '草你媽', 'fuck', 'shit', 'damn', 'bitch', 'asshole', 'dick', 'pussy', 'wtf', 'stfu', '死全家', '低能', '腦殘', '弱智', '外勞', '番仔', '死玻璃', '台女', '母豬','傻屌','憨Ｂ','憨B','憨兒'];
   const normalizeText = (text: string) => text.toLowerCase().replace(/\s+/g, '').replace(/[～~!@#$%^&*()\-_=+\.。,，]+/g, '');
   const normalizedContent = normalizeText(content);
   
